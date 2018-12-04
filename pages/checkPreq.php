@@ -51,11 +51,15 @@
     $questRecord = mysqli_fetch_assoc($result);
     $totalScore = $questRecord['totalScore'];
     if($totalScore > 15 && $totalScore <= 19){
-      echo "6 hrs";
+      echo "Based on your response in the questionnaire, you are recommended to take 6 credit hours for this semsester. \nCheck the courses the system recommends.";
     }else if($totalScore > 12 && $totalScore <= 14){
-      
+      echo "Based on your response in the questionnaire, you are recommended to take 9 credit hours for this semsester. \nCheck the courses the system recommends.";
+    }else if($totalScore > 8 && $toa <= 11){
+      echo "Based on your response in the questionnaire, you are recommended to take 12 credit hours for this semsester. \nCheck the courses the system recommends.";
+    }else{
+      echo "Based on your response in the questionnaire, you are recommended to take 15 credit hours for this semsester. \nCheck the courses the system recommends.";
     }
-    print_r($totalScore);
+//     print_r($totalScore);
     die();
     echo json_encode($result);
 //     echo intelSchdule($_POST['intelSchd']);
