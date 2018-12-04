@@ -108,8 +108,7 @@
     <div class="container">
       <div class="clear"></div>
       <div class="well jumbotron1"></div>
-<!--       <div class="jumbotron jumbotron1">
-      </div> -->
+      
       <div class="jumbotron jumbotron2">
         <div style="color:red">
           <img src="../asset/image/main/FAMU_Logo_10.gif" alt="FAMU" class="mx-auto d-block" style="width:25%">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 04, 2018 at 06:22 PM
+-- Generation Time: Dec 04, 2018 at 01:37 AM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.0.26
 
@@ -44,8 +44,7 @@ CREATE TABLE `advisor` (
 
 INSERT INTO `advisor` (`advisorID`, `firstName`, `middleName`, `lastName`, `advisorEmail`, `advisorNumber`, `advisorLocation`) VALUES
 (12345, 'Jerry', 'Justin', 'Brake', 'jerry.brake@famu.edu', 2021341234, 'NE 200, Bernneker BUilding'),
-(12346, 'Mary', 'Jane', 'Stone', 'mary.stone@famu.edu', 2012341234, 'NE 201, Berneker Building'),
-(12347, 'Udochi', 'H', 'Maduakor', 'udochi1.maduakor@famu.edu', 1234230990, 'NE 201, Berneker Building');
+(12346, 'Mary', 'Jane', 'Stone', 'mary.stone@famu.edu', 2012341234, 'NE 201, Berneker Building');
 
 -- --------------------------------------------------------
 
@@ -257,11 +256,9 @@ CREATE TABLE `StudentProfile` (
 --
 
 INSERT INTO `StudentProfile` (`studentID`, `firstName`, `middleName`, `lastName`, `studentDOB`, `physicalAddress`, `physicalCity`, `pState`, `physicalZip`, `mailingAddress`, `mailingCity`, `mState`, `mailingZip`, `personalPhone`, `cellPhone`, `campusEmail`, `personalEmail`, `advisorID`, `firstTime`) VALUES
-(30012345, 'Ra\'Teema', 'Ivy', 'Etienne', '1990-12-15', 'No 1, NW Avenue', 'Tallahassee', 'Florida', 32301, 'No 1, NW Avenue', 'Tallahassee', 'Florida', 32301, 2011234567, 2011234567, 'rateema1.stanley@famu.edu', 'rateema1.stanley@famu.edu', 12347, 1),
-(30012346, 'Victory', 'Jonh', 'Ginger', '1998-01-02', 'No 45, SW Avenue', 'Tallahassee', 'Florida', 32302, 'No 45, SW Avenue', 'Tallahassee', 'Florida', 32302, 2001232345, 2001232345, 'victor1.odewale @famu.edu', 'victor1.odewale @famu.edu', 12345, 0),
-(30012347, 'Temilola', 'Oliver', 'Aderibigbe', '2001-10-01', 'No SW Avenue', 'Tallahassee', 'Florida', 32301, 'No SW Avenue', 'Tallahassee', 'Florida', 32301, 2001232346, 2001232346, 'temilola1.aderibigbe@famu.edu', 'temilola1.aderibigbe@famu.edu', 12347, 1),
-(30012348, 'Bertony', 'Tate', 'Bornelus', '1998-09-09', '1115 Jonh Ave', 'Tallahassee', 'Florida', 32301, '1115 Jonh Ave', 'Tallahassee', 'Florida', 32301, 1503340987, 1503340987, 'bertony1.bornelus@famu.edu', 'bertony1.bornelus@famu.edu', 12346, 1),
-(30012349, 'Eleason', 'Jake', 'Williams ', '2000-05-12', '2045 W Tennessee St', 'Tallahassee', 'Florida', 32304, '2045 W Tennessee St', 'Tallahassee', 'Florida', 32304, 2141239989, 2141239989, 'eleason1.williams@famu.edu', 'eleason1.williams@famu.edu', 12346, 1);
+(30012345, 'John', 'William', 'Doe', '1999-01-01', 'No 1, NW Avenue', 'Tallahassee', 'Florida', 32301, 'No 1, NW Avenue', 'Tallahassee', 'Florida', 32301, 2011234567, 2011234567, 'john1.doe@famu.edu', 'john.doe@gmail.com', 12345, 1),
+(30012346, 'Sydney', 'Mitchell', 'Oscar', '1998-01-02', 'No 45, SW Avenue', 'Tallahassee', 'Florida', 32302, 'No 45, SW Avenue', 'Tallahassee', 'Florida', 32302, 2001232345, 2001232345, 'sydney1.oscar@famu.edu', 'sydney.oscar@gmail.com', 12345, 0),
+(30012347, 'Jean', 'Beef', 'Pung', '2001-10-01', 'No SW Avenue', 'Tallahassee', 'Florida', 32301, 'No SW Avenue', 'Tallahassee', 'Florida', 32301, 2001232346, 2001232346, 'jean1.pung@famu.edu', 'jean.pung@gmail.com', 12346, 1);
 
 -- --------------------------------------------------------
 
@@ -343,14 +340,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `username`, `password`, `userType`) VALUES
-(1, 'rateema1.stanley@famu.edu', '12345', 'student'),
-(2, 'temilola1.aderibigbe@famu.edu', '12345', 'student'),
-(3, 'victor1.odewale @famu.edu', '12345', 'student'),
-(4, 'bertony1.bornelus@famu.edu', '12345', 'student'),
-(5, 'eleason1.williams@famu.edu', '12345', 'student'),
-(6, 'mary.stone@famu.edu', '12345', 'advisor'),
-(7, 'udochi1.maduakor@famu.edu', '12345', 'advisor'),
-(8, 'jerry.brake@famu.edu', '12345', 'advisor');
+(1, 'john1.doe@famu.edu', '12345', 'student'),
+(2, 'jean1.pung@famu.edu', '12345', 'student'),
+(3, 'sydney1.oscar@famu.edu', '12345', 'student'),
+(5, 'jerry.brake@famu.edu', '12345', 'advisor'),
+(6, 'mary.stone@famu.edu', '12345', 'advisor');
 
 --
 -- Indexes for dumped tables
@@ -472,7 +466,7 @@ ALTER TABLE `transcript`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12348;
+  MODIFY `userID` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

@@ -45,115 +45,91 @@
   else if (isset($_POST['intelSchd'])) {
     $propSchd = $_POST['intelSchd'];
     $studentID = $_SESSION['studentID'];
+    
     //Query questionnaire record
     $query = "SELECT * FROM questionnaire WHERE studentID = '$studentID'";
     $result = mysqli_query($conn, $query);
     $questRecord = mysqli_fetch_assoc($result);
-    $totalScore = $questRecord['totalScore'];
+    $coding = $questRecord['code']; //get coding value
+    $studyHour = $questRecord['studyHour'];
+    $comments[] = "Check the courses the system recommends in the Recommedation catalog.";
+    
+    $totalScore = $questRecord['totalScore']; //get the student questionnaire score
     if($totalScore > 15 && $totalScore <= 19){
-      echo "Based on your response in the questionnaire, you are recommended to take 6 credit hours for this semsester. \nCheck the courses the system recommends.";
+      $suggestedHour = 6;
     }else if($totalScore > 12 && $totalScore <= 14){
-      echo "Based on your response in the questionnaire, you are recommended to take 9 credit hours for this semsester. \nCheck the courses the system recommends.";
-    }else if($totalScore > 8 && $toa <= 11){
-      echo "Based on your response in the questionnaire, you are recommended to take 12 credit hours for this semsester. \nCheck the courses the system recommends.";
+      $suggestedHour = 9;
+    }else if($totalScore > 8 && $totalScore <= 11){
+      $suggestedHour = 12;
     }else{
-      echo "Based on your response in the questionnaire, you are recommended to take 15 credit hours for this semsester. \nCheck the courses the system recommends.";
+      $suggestedHour = 15;
     }
-//     print_r($totalScore);
-    die();
-    echo json_encode($result);
-//     echo intelSchdule($_POST['intelSchd']);
-  }
-
-  // This function takes a class from the transcript table and returns its grade
-  function checkPreReq($classCode) {
-		ob_start();
-    //Query prerequisites record
-    $query = "SELECT prerequisiteID FROM prerequisites WHERE courseID = '$classCode'";
+    $comment1 = "Based on your response in the questionnaire, you are recommended to take ".$suggestedHour." credit hours for this semsester.";
+    $comments[] = $comment1;
+    
+    // Set concetration course comments
+    if($coding == "Yes"){
+      $comment2 = "Since you like coding, we recommend you taking WEB DESIGN classes or PROGRAMMING/CODING classes";
+    }else{
+      $comment2 = "Since you don't like coding, we recommend you taking CYBERSECURITY classes";
+    }
+    $comments[] = $comment2;
+    
+    // Set student study comments
+    if(($studyHour == 'Full Time') && ($suggestedHour < 12)){
+      $comment3 = 'We recommend you switching to PART-TIME instead of FULL-TIME';
+    }
+    $comments[] = $comment3;
+    
+    // Get the curriculum records.
+    $query = "SELECT * FROM courses WHERE {$_SESSION['semester']} = 1";
     $result = mysqli_query($conn, $query);
     
-    if(mysqli_num_rows($result) < 1){//Class has no prerequisites
-        $grade = 'P';
-    }else if(mysqli_num_rows($result) == 1){
-      $prerequisites = mysqli_fetch_assoc($result);
-      return json_encode("Here");
-      die();
-      $prerequisiteID = $prerequisites['prerequisiteID'];
-      $query = "SELECT courseGrade FROM transcript WHERE courseCode = '$prerequisiteID'";
-      $result = mysqli_query($conn, $query);
-      
-      if(mysqli_num_rows($result) < 1){//If the student has taken no prerequisites
-            $grade = 'F';
-        }else{//If the student has taken the prerequisites
-          $data = mysqli_fetch_assoc($result);
-          $courseGrade = $data['courseGrade'];
-          $grade = 'F';
-          switch ($courseGrade) {
-            case "A":
-              $grade = 'P';
-              break;
-            case "B":
-              $grade = 'P';
-              break;
-            case "C":
-              $grade = 'P';
-              break;
-            default:
-          }
-        }
-    }else{//if prerequisites
-			//store the code in an array
-      while ($prerequisites = mysqli_fetch_assoc($result)){
-        $prerequisites[] = $prerequisite['prerequisiteID'];
-      }
-      
-      foreach($prerequisites as $prerequisiteID):
-        //Query student transcript
-        $query = "SELECT courseGrade FROM transcript WHERE courseCode = '$prerequisiteID'";
-        $result = mysqli_query($conn, $query);
-      
-        if(mysqli_num_rows($result) < 1){//If the student has taken no prerequisites
-            $grade = 'F';
-        }else{//If the student has taken the prerequisites
-          $data = mysqli_fetch_assoc($result);
-          $courseGrade = $data['courseGrade'];
-          $grade = 'F';
-          switch ($courseGrade) {
-            case "A":
-              $grade = 'P';
-              break;
-            case "B":
-              $grade = 'P';
-              break;
-            case "C":
-              $grade = 'P';
-              break;
-            default:
-          }
-        }
-        if($grade == 'F'){//Student failed one of the prerequisites, stop checking for other prerequisites
-          break;
-        }
-      endforeach;
+    // While loops through every course
+    while ($curriculum = mysqli_fetch_assoc($result)){
+     $curriculumCode[] = $curriculum['courseCode'];
+     $curriculums[] = $curriculum;
     }
-    ob_end_clean();
-      header('Content-Type: application/json');
-        return json_encode($grade);	 // Return the grade
-          exit();
-  }
-
-  // This function takes the proposed classCodes and performs Intelligent Analysis
-  function intelSchdule($classCode){
-// 		ob_start();
-    $studentID = $_SESSION['studentID'];
-    //Query questionnaire record
-    $query = "SELECT * FROM questionnaire WHERE studentID = '$studentID'";
+    
+    // Check if the students has any transcript record
+    // Create SQL query
+    $query = "SELECT * FROM transcript WHERE studentID = '$studentID'";
     $result = mysqli_query($conn, $query);
-    if(mysqli_num_rows($result) >= 1){//Student have not filled the prerequisites
-        echo '<script type="text/javascript">alert("Student have not filled the questionnaire");</script>';
-//         die();
-    }else{
-        echo '<script type="text/javascript">alert("Here");</script>';
-    }
+
+    // Get the students profile
+     // While loops through every class
+     while ($transcript = mysqli_fetch_assoc($result)){
+       $transcriptCode[] = $transcript['courseCode'];
+       $transcripts[] = $transcript;
+     }
+    
+     if(mysqli_num_rows($result) < 1){
+       $courseCodeRemaining = $curriculumCode;
+       $courseRemaining = $curriculums;
+     }else if(mysqli_num_rows($result) == 1){
+       $courseCodeRemaining = array_diff($curriculumCode, $transcriptCode);
+       $courseRemaining = array_diff($curriculums, $transcripts);
+     }else{
+       $courseCodeRemaining = array_diff($curriculumCode, $transcriptCode);
+       $courseRemaining = array_diff($curriculums, $transcripts);
+     }
+         
+    // Generate the course based on the number of hours we suggested
+     $totalUnit = 0;
+     foreach($courseCodeRemaining as $courseCode):
+      // Create SQL query
+      $query = "SELECT * FROM courses WHERE courseCode = '$courseCode'";
+      $result = mysqli_query($conn, $query);
+      $courses = mysqli_fetch_assoc($result);
+      $totalUnit = $totalUnit + $courses['courseUnit'];
+      if($totalUnit > $suggestedHour){//if the total unit is more than the suggested unit then break the loop
+        break;
+      }
+      $suggestedCourses[] = $courses;
+     endforeach;
+//      print_r($comments);
+     $response['comments'] = $comments;
+     $response['courses'] = $suggestedCourses;
+    echo json_encode($response);
   }
 ?>

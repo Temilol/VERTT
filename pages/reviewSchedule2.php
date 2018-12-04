@@ -202,7 +202,7 @@
               <h3 style="text-align: center;">Your Courses</h3>
                 <div class="well ">
                   <div class="list-group-el">
-                    <ul class="list-group propCourse">
+                    <ul class="list-group">
                        <?php
                           foreach($propCourses as $propCourse):
                             echo "<li class='list-group-item'>{$propCourse['courseCode']} - {$propCourse['courseName']}</li>";
@@ -218,7 +218,7 @@
             <div class="dual-list list-right col-md-4">
               <h3 style="text-align: center;">Recommended Courses</h3>
               <div class="well">
-                <ul class="list-group">
+                <ul class="list-group recommendedCourse">
                 </ul>
               </div>
             </div>
@@ -226,7 +226,7 @@
             <div class="dual-list list-end col-md-4">
               <h3 style="text-align: center;">Comments</h3>
                 <div class="well">
-                  <textarea class="form-control" rows="12" id="comments" readonly></textarea>
+                  <textarea class="form-control" rows="12" id="comment" readonly></textarea>
                 </div>
             </div>
           </div>
@@ -234,9 +234,9 @@
 
         <div class="list-arrows" style="margin-left: 34%;">
           <div class="clear"></div>
-          <button type="button" class="btn btn-lg btn-success move-right btn-edited" name="Add">Accept</button>
-          <button type="button" class="btn btn-lg btn-success move-middle btn-edited" name="Finish" >Modify</button>
-          <button type="button" class="btn btn-lg btn-success move-left btn-edited" name="Remove" >Reject</button>
+          <button type="button" class="btn btn-lg btn-success move-right btn-edited" onclick="alert('Coming Soon');" name="Add">Accept</button>
+          <button type="button" class="btn btn-lg btn-success move-middle btn-edited" onclick="alert('Coming Soon');" name="Finish" >Modify</button>
+          <button type="button" class="btn btn-lg btn-success move-left btn-edited" onclick="alert('Coming Soon');" name="Remove" >Reject</button>
         </div>
       </div>
     </div>
@@ -248,13 +248,20 @@
       $(document).ready(function(){
         var myArry  = sessionStorage.getItem('propScheduleArray');
         var propScheduleArray = JSON.parse(myArry);
-        console.log(propScheduleArray);
         $.ajax({
             url: 'checkPreq.php', //Reference to the checkPreq.php page
             type: "POST", //References it after (post)
             dataType: 'json', //The type of data being used
             data: {"intelSchd": JSON.stringify(propScheduleArray)}, //Call the function and use the array variable to execute
             async: false,
+            success: function(response) {//ajax call successful
+              for(var x = 0; x < response['courses'].length; x++){
+                $("<li class='list-group-item'>"+response['courses'][x]['courseCode']+" - "+response['courses'][x]['courseName']+"</li>").appendTo('.recommendedCourse');
+              }
+              for(var x = 0; x < response['comments'].length; x++){
+                document.getElementById('comment').value += response['comments'][x] + '\n\n';
+              }
+            },
         });
       });
     </script>
