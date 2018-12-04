@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+<!--     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <!------ Include the above in your HEAD tag ---------->
+
+    <head>
+      <title>VERTT</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <script src="../asset/js/questionnaire/submit.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <style>
+        .error{
+          color: red;
+          text-transform: uppercase;
+        }
+      </style>
+      <script type="text/javascript">
+          function getTranscript(){
+			var name = document.getElementById('getTranscript').value;
+			if (name=='Yes') {
+				document.getElementById('working1').style.display="block";
+			}else{
+				document.getElementById('working1').style.display="none";
+                document.getElementById('working_hour').value=" ";
+            }
+          }
+              
+          function show_children_field(){
+			var name = document.getElementById('children').value;
+			if (name=='Yes') {
+				document.getElementById('children1').style.display="block";
+				document.getElementById('children2').style.display="block";
+				document.getElementById('children3').style.display="block";
+			}else{
+				document.getElementById('children1').style.display="none";
+				document.getElementById('children2').style.display="none";
+				document.getElementById('children3').style.display="none";
+                
+                document.getElementById('children1').value=" ";
+                document.getElementById('children2').value=" ";
+                document.getElementById('children3').value=" ";
+            }
+		}
+      </script>
+    </head>
+
+    <hr>
+    <body>
+        <div class="container bootstrap snippet" style="color: green;">
+            
+            <div class="row">
+                <div class="col-sm-10"><h1>VERTT</h1></div>
+                <div class="col-sm-2"><a href="#" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="http://www.gravatar.com/avatar/28fd20ccec6865e2d5f0e1f4446eb7bf?s=100"></a></div>
+            </div>
+
+            <div class="row">
+                
+                <!--left col-->
+                <div class="col-sm-3">
+                    <!-- Avatar -->
+                    <div class="text-center">
+                        <img src="../asset/image/main/icon.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                    </div><br>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Account Information <i class="fa fa-link fa-1x"></i></div>
+                        <ul class="list-group">
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Email</strong></span> john.doe@famu.edu</li>
+                            <li class="list-group-item text-right"><span class="pull-left"><strong>Major</strong></span> CIS</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!--Right col-->
+                <div class="col-sm-9">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#home">User Name</a></li>
+                    </ul>
+
+                    <!--Questions-->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home">
+                            <hr>
+                              <form class="form" method="POST" action="mysqli_connect.php" id="form">                              
+
+                                  <div class="form-group row">
+                                    
+                                      <label for="studentID" class="col-xs-6 col-form-label">Select Student<span style="color:red">*</span></label>
+                                      <div class="col-xs-6">
+                                       <?php 
+                                        mysql_connect($localhost,$root,$password)
+                                        or die(mysql_error()); 
+                                        mysql_select_db($db_database) or 
+                                         die(mysql_error());
+                                         $student = mysql_query("select firstName, LastName from studentProfile where advisorID = 12345")     
+                                        or die(mysql_error()); 
+                                         while($)
+                                        ?>
+                                        
+                                          <select id="studentID" name="studentID" class="custom-select">
+                                          
+                                          <label class="error" for="full_time" id="full_time_error">This field is required.</label>
+                                      </div>
+                                     <div><button class="btn btn-lg btn-success" id="get_transcript" type="Get Transcript"><i class="glyphicon glyphicon-ok-sign"></i> Get Transcript</button></div>
+                                    <table>
+                                      <tr>
+                                        <th>Course Code</th>
+                                        <th>Course Name</th>
+                                        <th>Course Unit</th>
+                                        <th>Course Grade</th>
+                                        <?php
+                                         $conn = mysqli_connect("localhost", "root", "","id6870583_vertt");
+                                          if($conn->connect_error){
+                                          die("Connection failed".$conn->connect_error);             
+                                            }    
+                                            $sql = "select studentID,courseCode,courseName,courseUnit,courseGradefrom transcript where studentID = $studentID;"
+                                            $result = $conn-> query($sql);
+                                            if ($result -> num_rows > 0){
+                                               while ($row = $result ->fetch_assoc()){
+                                                echo "<tr><td>.$row["courseCode"].</tr></td><tr><td>.$row["courseName"].</tr></td><tr><td>.$row["courseUnit"].</tr></td>"
+                                                } 
+                                               }else{
+                                                echo "0 results";
+                                               } 
+                                               $conn->close();
+                                              ?>
+                                      </tr>
+                                    </table>
+                                  </div>                             
+                                  <div class="form-group">
+                                       <div class="col-xs-12">
+                                            <br>
+                                            <button class="btn btn-lg btn-success" id="send" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Save</button>
+                                            <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
+                                        </div>
+                                  </div>
+                            </form>
+                            <hr>
+                        </div><!--/tab-pane-->
+                    </div><!--/tab-content-->
+                </div><!--/col-sm-9-->
+            </div><!--/row-->
+        </div><!--/container-->
+    </body>
+</html>

@@ -1,0 +1,14 @@
+progress
+{
+  text-align:center;
+  height:25px;
+  width:200px;
+}
+progress:before {
+  content: 'Value is ' attr(value);
+  position:relative;
+  top:5px;
+}
+.unique:before {
+  content: attr(data-label);
+}
