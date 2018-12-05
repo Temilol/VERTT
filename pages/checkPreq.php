@@ -132,4 +132,48 @@
      $response['courses'] = $suggestedCourses;
     echo json_encode($response);
   }
+  else if (isset($_POST['insertScd'])) {
+//     print_r($_POST['insertScd']);
+    $recomScheduleArray = $_POST['insertScd']['recomScheduleArray'];
+    $propScheduleArray = $_POST['insertScd']['propScheduleArray'];
+    $sysComments = $_POST['insertScd']['sysComments'];
+    $decision = $_POST['insertScd']['decision'];
+    $studentID = $_SESSION['studentID'];
+    
+    // Convert the arrays to string
+    $recomScheduleStr = implode("," , $recomScheduleArray);
+    $propScheduleStr = implode("," , $propScheduleArray);
+    $sysCommentsStr = implode("," , $sysComments);
+//     $b = explode(",", $a); CONVERTS STRING BACK TO ARRAY
+    
+    //Delete existing record
+    $query = "DELETE FROM proposalSchedule WHERE studentID = '$studentID'";
+    $result = mysqli_query($conn, $query);
+    
+    // Insert a new record into the database
+    $query = "INSERT INTO proposalSchedule (proposalScheduleID, studentID, proposedSchedule, recommendedCourses, comments, studentDecision, advisorDecision) VALUES ('', '$studentID', '$propScheduleStr', '$recomScheduleStr', '$sysCommentsStr', '$decision', 'NULL')";
+    $result = mysqli_query($conn, $query);
+    
+    //Send email to the advisor
+//     $advisorID = $_SESSION['advisorID'];
+//     $query = "SELECT advisorEmail from advisor WHERE advisorID = '$advisorID'"; //Get the advisor email
+//     $result = mysqli_query($conn, $query);
+//     $advisor = mysqli_fetch_assoc($result);
+    
+    //Compose the mail
+//     $to = $advisor['advisorEmail']; //mail receipent
+    $to = 'temz4rill@gmail.com';
+    $subject = $studentID.' Advised Schedule'; //mail subject
+    $msg = "Hello, \n\nStudent with Id Number $studentID has accepted our course recommdation and request for your review. \nPlease login to the system and verify the selection. \n\nThank you. \n\nVERTT.";
+    
+    // send the email
+    mail($to,$subject,$msg);
+    
+    
+    
+//     var_dump(mail($to,$subject,$msg));
+//     die();
+//     var_dump($val);
+//     print_r(error_get_last());
+  }
 ?>

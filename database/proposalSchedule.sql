@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 03, 2018 at 02:01 AM
+-- Generation Time: Dec 04, 2018 at 10:27 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.0.26
 
@@ -31,15 +31,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `proposalSchedule` (
   `proposalScheduleID` int(10) NOT NULL,
   `studentID` int(10) NOT NULL,
-  `scheduleID` int(10) NOT NULL,
-  `courseID` int(10) NOT NULL,
-  `courseID1` int(100) NOT NULL,
-  `courseID2` int(100) NOT NULL,
-  `courseID3` int(100) NOT NULL,
-  `courseID4` int(100) NOT NULL,
-  `courseID5` int(100) NOT NULL,
-  `courseID6` int(100) NOT NULL,
-  `advisorID` int(10) NOT NULL
+  `proposedSchedule` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `recommendedCourses` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `comments` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -51,16 +45,7 @@ CREATE TABLE `proposalSchedule` (
 --
 ALTER TABLE `proposalSchedule`
   ADD PRIMARY KEY (`proposalScheduleID`),
-  ADD KEY `studentID` (`studentID`),
-  ADD KEY `scheduleID` (`scheduleID`),
-  ADD KEY `advisorID` (`advisorID`),
-  ADD KEY `courseID` (`courseID`),
-  ADD KEY `courseID1` (`courseID1`),
-  ADD KEY `courseID2` (`courseID2`),
-  ADD KEY `courseID3` (`courseID3`),
-  ADD KEY `courseID4` (`courseID4`),
-  ADD KEY `courseID5` (`courseID5`),
-  ADD KEY `courseID6` (`courseID6`);
+  ADD KEY `studentID` (`studentID`);
 
 --
 -- Constraints for dumped tables
@@ -70,7 +55,7 @@ ALTER TABLE `proposalSchedule`
 -- Constraints for table `proposalSchedule`
 --
 ALTER TABLE `proposalSchedule`
-  ADD CONSTRAINT `proposalSchedule_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `StudentProfile` (`studentID`);
+  ADD CONSTRAINT `studentID` FOREIGN KEY (`studentID`) REFERENCES `StudentProfile` (`studentID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
