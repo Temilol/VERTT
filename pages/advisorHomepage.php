@@ -116,7 +116,7 @@
           <div class="clear"></div>
           <div style="padding-top: 15%;">
             <button type="button" class="btn btn-lg btn-success btn-edited" name="Build_Schedule" onclick="window.location='studentRecords.php';">Student Records</button>
-            <button type="button" class="btn btn-lg btn-success btn-edited" name="Build_Schedule" onclick="alert('Coming Soon');" style="margin-left: 11%;">View Students Schedule</button>
+            <button type="button" class="btn btn-lg btn-success btn-edited" name="Build_Schedule" onclick="window.location='studentRecords1.php';" style="margin-left: 11%;">View Students Schedule</button>
             <button type="button" class="btn btn-lg btn-success btn-edited" name="Build_Schedule" onclick="window.location='advisorUpdate.php';" style="margin-left: 6%;">Update Advisor Contact</button>
           </div>
         </div>

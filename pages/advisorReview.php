@@ -1,29 +1,43 @@
 <?php
-  // start the session
+  // start session
   session_start();
+
+  // Extract Input
+  extract($_POST);
 
   // call the database config file
   require_once('../config/mysqli_connect.php');
+
+  //Get the student name
+  $query = "SELECT firstName, lastName FROM StudentProfile WHERE studentID = '$studentID'";
+  $result = mysqli_query($conn, $query);
+  $stud = mysqli_fetch_assoc($result);
+  $firstName = $stud['firstName'];
+  $lastName = $stud['lastName'];
+  // Check if the students has submitted any proposalSchedule
+  // Create SQL query
+  $query = "SELECT * FROM proposalSchedule WHERE studentID = '$studentID'";
+  $result = mysqli_query($conn, $query);
+
+  if(mysqli_num_rows($result) < 1){//No Student Transcript in the record
+    echo '<script type="text/javascript">alert("Student have not submitted a request.");</script>';
+    header("refresh:0; url={$_SERVER["HTTP_REFERER"]}");
+    die();
+  }
+
+  $proposalSchedule = mysqli_fetch_assoc($result);
+  //extract the fields
+  $recomScheduleStr = $proposalSchedule['recommendedCourses'];
+  $propScheduleStr = $proposalSchedule['proposedSchedule'];
+  $sysCommentsStr = $proposalSchedule['comments'];
   
-  // redirect back to the login screen if the session is empty
-  if(empty($_SESSION)){
-     echo '<script type="text/javascript">alert("You need to be logged in");</script>'; 
-     header("refresh:0; url=../login.html");
-     die();
-  }
+  //CONVERTS STRING BACK TO ARRAY
+  $recomScheduleArray = explode(",", $recomScheduleStr);
+  $propScheduleArray = explode(",", $propScheduleStr);
+  $sysComments = explode(",", $sysCommentsStr);
 
-// echo isset($_SESSION["propClass"]);
-// die();
-  // Get the propCourses from the session vaiable
-  if(!isset($_SESSION["propClass"])){//if it doesn't exist
-     echo '<script type="text/javascript">alert("You need to build a class");</script>'; 
-     header("refresh:0; url=buildSchedule.php");
-     die();
-  }
-
-  $propSchClasses = $_SESSION["propClass"];
-
-  foreach($propSchClasses as $propSchClassCode):
+  //Get the proposedSchedule Course details
+  foreach($propScheduleArray as $propSchClassCode):
     // Check for the details of the courses
     // Create SQL query
     $query = "SELECT * FROM courses WHERE courseCode = '$propSchClassCode'";
@@ -33,7 +47,20 @@
     }
     $propCourses[] = mysqli_fetch_assoc($result);
   endforeach;
+
+  //Get the recommendedSchedule Course details
+  foreach($recomScheduleArray as $recomSchClassCode):
+    // Check for the details of the courses
+    // Create SQL query
+    $query = "SELECT * FROM courses WHERE courseCode = '$recomSchClassCode'";
+    $result = mysqli_query($conn, $query);
+    if(mysqli_num_rows($result) < 1){ //If no course is found, omit the course
+      continue;
+    }
+    $recomCourses[] = mysqli_fetch_assoc($result);
+  endforeach;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -199,7 +226,7 @@
           <div class="row-middle">
 
             <div class="dual-list list-left col-md-4">
-              <h3 style="text-align: center;">Your Courses</h3>
+              <h3 style="text-align: center;"><?php echo"{$firstName} {$lastName}\n"; ?>Courses</h3>
                 <div class="well ">
                   <div class="list-group-el">
                     <ul class="list-group">
@@ -208,25 +235,34 @@
                             echo "<li class='list-group-item'>{$propCourse['courseCode']} - {$propCourse['courseName']}</li>";
                           endforeach;
                        ?>
-
-  
                     </ul>
                   </div>
                 </div>
             </div>
 
             <div id="tempRecomdCourses"  class="dual-list list-right col-md-4">
-              <h3 style="text-align: center;">Recommended Courses</h3>
+              <h3 style="text-align: center;">VERTT Recommended Courses</h3>
               <div class="well">
                 <ul class="list-group recommendedCourse">
+                   <?php
+                      foreach($recomCourses as $recomCourse):
+                        echo "<li class='list-group-item'>{$recomCourse['courseCode']} - {$recomCourse['courseName']}</li>";
+                      endforeach;
+                   ?>
                 </ul>
               </div>
             </div>
 
             <div class="dual-list list-end col-md-4">
-              <h3 style="text-align: center;">Comments</h3>
+              <h3 style="text-align: center;">VERTT Comments</h3>
                 <div class="well">
-                  <textarea class="form-control" rows="12" id="comment" readonly></textarea>
+                  <textarea class="form-control" rows="12" id="comment" readonly>
+                   <?php
+                      foreach($sysComments as $sysComment):
+                        echo "{$sysComment}\n\n";
+                      endforeach;
+                   ?>
+                  </textarea>
                 </div>
             </div>
           </div>
@@ -235,7 +271,6 @@
         <div class="list-arrows" style="margin-left: 34%;">
           <div class="clear"></div>
           <button type="button" id="btn-accept" class="btn btn-lg btn-success move-right btn-edited" name="Add">Accept</button>
-          <button type="button" id="btn-modify" class="btn btn-lg btn-success move-middle btn-edited" name="Finish" >Modify</button>
           <button type="button" id="btn-reject" class="btn btn-lg btn-success move-left btn-edited" name="Remove" >Reject</button>
         </div>
       </div>
@@ -245,120 +280,15 @@
     <script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script>
-      $(document).ready(function(){
-        var myArry  = sessionStorage.getItem('propScheduleArray');
-        var propScheduleArray = JSON.parse(myArry);
-        $.ajax({
-            url: 'checkPreq.php', //Reference to the checkPreq.php page
-            type: "POST", //References it after (post)
-            dataType: 'json', //The type of data being used
-            data: {"intelSchd": JSON.stringify(propScheduleArray)}, //Call the function and use the array variable to execute
-            async: false,
-            success: function(response) {//ajax call successful
-              for(var x = 0; x < response['courses'].length; x++){
-                $("<li class='list-group-item'>"+response['courses'][x]['courseCode']+" - "+response['courses'][x]['courseName']+"</li>").appendTo('.recommendedCourse');
-              }
-              for(var x = 0; x < response['comments'].length; x++){
-                document.getElementById('comment').value += response['comments'][x] + '\n\n';
-              }
-              sessionStorage.setItem('comment', JSON.stringify(response['comments'])); //set a new propScheduleArray in the session
-            },
-        });
-      });
-      
-      $("#btn-modify").click(function(){
-        var retVal = confirm("Are you sure you want to start again?");
-        if(retVal == true){
-          window.location.href = "buildSchedule.php";
-        }else{
-          return false;
-        }
-      });
-      
       $("#btn-accept").click(function(){
-        var retVal = confirm("Are you sure you want to accept our suggestions?");
+        var retVal = confirm("Are you sure you want to accept the student schedule?");
         if(retVal == true){
-          var myArry  = sessionStorage.getItem('propScheduleArray');
-          var myComments  = sessionStorage.getItem('comment');
-          var sysComments = JSON.parse(myComments);
-          var propScheduleArray = JSON.parse(myArry);
-          var temprecomScheduleArray = []; // Array that will hold the temporary proposed schedule classes
-          var recomScheduleArray = []; // Array that will hold the finalised proposed schedule classes
-
-          $("#tempRecomdCourses li").each(function() {temprecomScheduleArray.push($(this).text()) }); // Add every class to the array
           
-          for(var x = 0; x < temprecomScheduleArray.length; x++){	
-            temprecomScheduleArray[x] = temprecomScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
-            var i = 0;
-            recomScheduleArray[x] = "";
-            while(temprecomScheduleArray[x][i] != " "){ //Extract the course code from the string
-              recomScheduleArray[x] = recomScheduleArray[x] + temprecomScheduleArray[x][i];
-              i++;
-            }
-          }
-          
-          data = {'recomScheduleArray': recomScheduleArray, 'propScheduleArray': propScheduleArray, 'sysComments': sysComments, 'decision': 'accept'};
-//           console.log(data);
-          $.ajax({
-            url: 'checkPreq.php', //Reference to the checkPreq.php page
-            type: "POST", //References it after (post)
-            dataType: 'json', //The type of data being used
-            data: {"insertScd": data}, //Call the function and use the array variable to execute
-            async: false,
-            success: function(response) {//ajax call successful
-              console.log(response);
-            },
-          });
-          alert('Your schedule has been sent to your advisor for further review');
-          window.location.href = "homepage.php";
-        }else{
-          return false;
-        }
-        
-      });
-      
-      $("#btn-reject").click(function(){
-        var retVal = confirm("Are you sure you want to reject our suggestions?");
-        if(retVal == true){
-          var myArry  = sessionStorage.getItem('propScheduleArray');
-          var myComments  = sessionStorage.getItem('comment');
-          var sysComments = JSON.parse(myComments);
-          var propScheduleArray = JSON.parse(myArry);
-          var temprecomScheduleArray = []; // Array that will hold the temporary proposed schedule classes
-          var recomScheduleArray = []; // Array that will hold the finalised proposed schedule classes
-
-          $("#tempRecomdCourses li").each(function() {temprecomScheduleArray.push($(this).text()) }); // Add every class to the array
-          
-          for(var x = 0; x < temprecomScheduleArray.length; x++){	
-            temprecomScheduleArray[x] = temprecomScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
-            var i = 0;
-            recomScheduleArray[x] = "";
-            while(temprecomScheduleArray[x][i] != " "){ //Extract the course code from the string
-              recomScheduleArray[x] = recomScheduleArray[x] + temprecomScheduleArray[x][i];
-              i++;
-            }
-          }
-          
-          data = {'recomScheduleArray': recomScheduleArray, 'propScheduleArray': propScheduleArray, 'sysComments': sysComments, 'decision': 'reject'};
-          console.log(data);
-          $.ajax({
-            url: 'checkPreq.php', //Reference to the checkPreq.php page
-            type: "POST", //References it after (post)
-            dataType: 'json', //The type of data being used
-            data: {"insertScdr": data}, //Call the function and use the array variable to execute
-            async: false,
-            success: function(response) {//ajax call successful
-              console.log(response);
-            },
-          });
-          alert('Your schedule has been sent to your advisor for further review');
-          window.location.href = "homepage.php";
         }else{
           return false;
         }
       });
-      
-      
     </script>
   </body>
 </html>
+

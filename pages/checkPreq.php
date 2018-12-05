@@ -132,7 +132,7 @@
      $response['courses'] = $suggestedCourses;
     echo json_encode($response);
   }
-  else if (isset($_POST['insertScd'])) {
+  else if (isset($_POST['insertScd'])) {//This function inserts the schedule into the database and alerts the advisor
 //     print_r($_POST['insertScd']);
     $recomScheduleArray = $_POST['insertScd']['recomScheduleArray'];
     $propScheduleArray = $_POST['insertScd']['propScheduleArray'];
@@ -164,7 +164,44 @@
 //     $to = $advisor['advisorEmail']; //mail receipent
     $to = 'temz4rill@gmail.com';
     $subject = $studentID.' Advised Schedule'; //mail subject
-    $msg = "Hello, \n\nStudent with Id Number $studentID has accepted our course recommdation and request for your review. \nPlease login to the system and verify the selection. \n\nThank you. \n\nVERTT.";
+    $msg = "Hello, \n\n$firstName $lastName with student id $studentID has ACCEPTED our course recommendation and request for your review. \nPlease login to the system and verify the selection. \n\nThank you. \n\nVERTT.";
+    
+    // send the email
+    mail($to,$subject,$msg);
+  }
+else if (isset($_POST['insertScdr'])) { //This function inserts the schedule into the database and alerts the advisor
+    $recomScheduleArray = $_POST['insertScdr']['recomScheduleArray'];
+    $propScheduleArray = $_POST['insertScdr']['propScheduleArray'];
+    $sysComments = $_POST['insertScdr']['sysComments'];
+    $decision = $_POST['insertScdr']['decision'];
+    $studentID = $_SESSION['studentID'];
+    $firstName = $_SESSION['firstName'];
+    $lastName = $_SESSION['lastName'];
+    
+    // Convert the arrays to string
+    $recomScheduleStr = implode("," , $recomScheduleArray);
+    $propScheduleStr = implode("," , $propScheduleArray);
+    $sysCommentsStr = implode("," , $sysComments);
+    
+    //Delete existing record
+    $query = "DELETE FROM proposalSchedule WHERE studentID = '$studentID'";
+    $result = mysqli_query($conn, $query);
+    
+    // Insert a new record into the database
+    $query = "INSERT INTO proposalSchedule (proposalScheduleID, studentID, proposedSchedule, recommendedCourses, comments, studentDecision, advisorDecision) VALUES ('', '$studentID', '$propScheduleStr', '$recomScheduleStr', '$sysCommentsStr', '$decision', 'NULL')";
+    $result = mysqli_query($conn, $query);
+//     print_r($result);
+    //Send email to the advisor
+//     $advisorID = $_SESSION['advisorID'];
+//     $query = "SELECT advisorEmail from advisor WHERE advisorID = '$advisorID'"; //Get the advisor email
+//     $result = mysqli_query($conn, $query);
+//     $advisor = mysqli_fetch_assoc($result);
+    
+    //Compose the mail
+//     $to = $advisor['advisorEmail']; //mail receipent
+    $to = 'temz4rill@gmail.com';
+    $subject = $studentID.' Advised Schedule'; //mail subject
+    $msg = "Hello, \n\n$firstName $lastName with student id $studentID has REJECTED our course recommendation and request for your review. \nPlease login to the system and verify the selection. \n\nThank you. \n\nVERTT.";
     
     // send the email
     mail($to,$subject,$msg);
