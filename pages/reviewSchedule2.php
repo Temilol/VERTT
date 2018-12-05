@@ -293,10 +293,6 @@
             }
           }
           
-//           console.log(recomScheduleArray);
-//           console.log(propScheduleArray);
-//           console.log(sysComments);
-          
           data = {'recomScheduleArray': recomScheduleArray, 'propScheduleArray': propScheduleArray, 'sysComments': sysComments, 'decision': 'accept'};
 //           console.log(data);
           $.ajax({
@@ -307,12 +303,12 @@
             async: false,
             success: function(response) {//ajax call successful
               console.log(response);
-              
             },
           });
-//           alert('accepted working!!!!');
+          alert('Your schedule has been sent to your advisor for further review');
+          window.location.href = "homepage.php";
         }else{
-//           alert('accepted!!!');
+          return false;
         }
         
       });

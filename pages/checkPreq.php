@@ -168,12 +168,5 @@
     
     // send the email
     mail($to,$subject,$msg);
-    
-    
-    
-//     var_dump(mail($to,$subject,$msg));
-//     die();
-//     var_dump($val);
-//     print_r(error_get_last());
   }
 ?>
