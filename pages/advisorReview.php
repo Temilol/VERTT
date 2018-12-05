@@ -30,11 +30,13 @@
   $recomScheduleStr = $proposalSchedule['recommendedCourses'];
   $propScheduleStr = $proposalSchedule['proposedSchedule'];
   $sysCommentsStr = $proposalSchedule['comments'];
-  
+  $studentDecision = $proposalSchedule['studentDecision'];
+// print_r($studentDecision);
+// die();
   //CONVERTS STRING BACK TO ARRAY
   $recomScheduleArray = explode(",", $recomScheduleStr);
   $propScheduleArray = explode(",", $propScheduleStr);
-  $sysComments = explode(",", $sysCommentsStr);
+  $sysComments = explode(";", $sysCommentsStr);
 
   //Get the proposedSchedule Course details
   foreach($propScheduleArray as $propSchClassCode):
@@ -60,7 +62,6 @@
     $recomCourses[] = mysqli_fetch_assoc($result);
   endforeach;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -221,11 +222,20 @@
       <div class="clear"></div>
       <div class="well jumbotron1" style="height: 40px;" ></div>
       <div class="jumbotron jumbotron2">
+        <div class="well jumbotron1" style="height: 60px;" >
+          <?php
+            if($studentDecision == "accept"){
+              echo"<p style='text-align: center'> {$firstName} {$lastName} have decided to go with VERTT recommeded schedule</p>";
+            }else if($studentDecision == "reject"){
+              echo"<p style='text-align: center'> {$firstName} {$lastName} have decided to go with their schedule</p>";
+            }
+          ?>
+        </div>
         <div class="container" >
           <br />
           <div class="row-middle">
 
-            <div class="dual-list list-left col-md-4">
+            <div id="tempProposedCourses" class="dual-list list-left col-md-4">
               <h3 style="text-align: center;"><?php echo"{$firstName} {$lastName}\n"; ?>Courses</h3>
                 <div class="well ">
                   <div class="list-group-el">
@@ -259,7 +269,7 @@
                   <textarea class="form-control" rows="12" id="comment" readonly>
                    <?php
                       foreach($sysComments as $sysComment):
-                        echo "{$sysComment}\n\n";
+                        echo "\n{$sysComment}\n";
                       endforeach;
                    ?>
                   </textarea>
@@ -267,8 +277,11 @@
             </div>
           </div>
         </div>
+        
+        <input name = "studentDecision" id = "studentDecision" type="hidden" value="<?php echo "{$studentDecision}"; ?>">
+        <input name = "studentID" id = "studentID" type="hidden" value="<?php echo "{$studentID}"; ?>">
 
-        <div class="list-arrows" style="margin-left: 34%;">
+        <div class="list-arrows" style="margin-left: 38%;">
           <div class="clear"></div>
           <button type="button" id="btn-accept" class="btn btn-lg btn-success move-right btn-edited" name="Add">Accept</button>
           <button type="button" id="btn-reject" class="btn btn-lg btn-success move-left btn-edited" name="Remove" >Reject</button>
@@ -283,7 +296,99 @@
       $("#btn-accept").click(function(){
         var retVal = confirm("Are you sure you want to accept the student schedule?");
         if(retVal == true){
+          var studentDecision = document.getElementById("studentDecision").value; //Get the student decision
+          var studentID = document.getElementById("studentID").value; //Get the student decision
+          var tempPropScheduleArray = []; // Array that will temporary hold the proposed schedule classes
+          var propScheduleArray = []; // Array that will hold the finalised proposed schedule classes
+          var temprecomScheduleArray = []; // Array that will hold the temporary proposed schedule classes
+          var recomScheduleArray = []; // Array that will hold the finalised proposed schedule classes
+
+          //Proposed Courses
+          $("#tempProposedCourses li").each(function() { tempPropScheduleArray.push($(this).text()) }); // Add every class to the array
+          for ( var x = 0; x < tempPropScheduleArray.length; x++){	
+            tempPropScheduleArray[x] = tempPropScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
+            var i = 0;
+            propScheduleArray[x] = "";
+            while(tempPropScheduleArray[x][i] != " "){ //Extract the course code from the string
+              propScheduleArray[x] = propScheduleArray[x] + tempPropScheduleArray[x][i];
+              i++;
+            }
+          }
+
+          //Recommended Courses
+          $("#tempRecomdCourses li").each(function() {temprecomScheduleArray.push($(this).text()) }); // Add every class to the array
+          for(var x = 0; x < temprecomScheduleArray.length; x++){	
+            temprecomScheduleArray[x] = temprecomScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
+            var i = 0;
+            recomScheduleArray[x] = "";
+            while(temprecomScheduleArray[x][i] != " "){ //Extract the course code from the string
+              recomScheduleArray[x] = recomScheduleArray[x] + temprecomScheduleArray[x][i];
+              i++;
+            }
+          }
           
+          var data = {'recomScheduleArray': recomScheduleArray, 'propScheduleArray': propScheduleArray, 'studentDecision': studentDecision, 'advisorDecision': 'accept', 'studentID': studentID};
+          console.log(data);
+          $.ajax({
+            url: 'checkPreq.php', //Reference to the checkPreq.php page
+            type: "POST", //References it after (post)
+            dataType: 'json', //The type of data being used
+            data: {"instStudScd": data}, //Call the function and use the array variable to execute
+            async: false,
+          });
+          alert('Your response have been saved. A mail have been sent to the student');
+          window.location.href = "advisorHomepage.php";
+        }else{
+          return false;
+        }
+      });
+      
+      
+      $("#btn-reject").click(function(){
+        var retVal = confirm("Are you sure you want to reject the student schedule?");
+        if(retVal == true){
+          var studentDecision = document.getElementById("studentDecision").value; //Get the student decision
+          var studentID = document.getElementById("studentID").value; //Get the student decision
+          var tempPropScheduleArray = []; // Array that will temporary hold the proposed schedule classes
+          var propScheduleArray = []; // Array that will hold the finalised proposed schedule classes
+          var temprecomScheduleArray = []; // Array that will hold the temporary proposed schedule classes
+          var recomScheduleArray = []; // Array that will hold the finalised proposed schedule classes
+
+          //Proposed Courses
+          $("#tempProposedCourses li").each(function() { tempPropScheduleArray.push($(this).text()) }); // Add every class to the array
+          for ( var x = 0; x < tempPropScheduleArray.length; x++){	
+            tempPropScheduleArray[x] = tempPropScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
+            var i = 0;
+            propScheduleArray[x] = "";
+            while(tempPropScheduleArray[x][i] != " "){ //Extract the course code from the string
+              propScheduleArray[x] = propScheduleArray[x] + tempPropScheduleArray[x][i];
+              i++;
+            }
+          }
+
+          //Recommended Courses
+          $("#tempRecomdCourses li").each(function() {temprecomScheduleArray.push($(this).text()) }); // Add every class to the array
+          for(var x = 0; x < temprecomScheduleArray.length; x++){	
+            temprecomScheduleArray[x] = temprecomScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
+            var i = 0;
+            recomScheduleArray[x] = "";
+            while(temprecomScheduleArray[x][i] != " "){ //Extract the course code from the string
+              recomScheduleArray[x] = recomScheduleArray[x] + temprecomScheduleArray[x][i];
+              i++;
+            }
+          }
+          
+          var data = {'advisorDecision': 'reject', 'studentID': studentID};
+          console.log(data);
+          $.ajax({
+            url: 'checkPreq.php', //Reference to the checkPreq.php page
+            type: "POST", //References it after (post)
+            dataType: 'json', //The type of data being used
+            data: {"delStudScd": data}, //Call the function and use the array variable to execute
+            async: false,
+          });
+          alert('Your response have been saved. A mail have been sent to the student');
+          window.location.href = "advisorHomepage.php";
         }else{
           return false;
         }

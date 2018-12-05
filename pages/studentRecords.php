@@ -13,6 +13,7 @@
    if(mysqli_num_rows($result) < 1){//No Student in the record
      echo '<script type="text/javascript">alert("You have no students in our record.");</script>';
      header("refresh:0; url=../pages/advisorHomepage.php"); 
+     die();
    }
 
    // Get the students profile

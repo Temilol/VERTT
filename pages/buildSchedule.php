@@ -276,6 +276,7 @@
 
             $('body').on('click', '.list-group .list-group-item', function () {
                 $(this).toggleClass('active');
+              
             });
             $('.list-arrows button').click(function () {
                 var $button = $(this), actives = '';
@@ -283,11 +284,13 @@
                     actives = $('.list-right ul li.active');
                     actives.clone().appendTo('.list-left ul');
                     actives.remove();
+                  $('.active').not($(this)).removeClass('active');
                     
                 } else if ($button.hasClass('move-right')) {
                     actives = $('.list-left ul li.active');
                     actives.clone().appendTo('.list-right ul');
                     actives.remove();
+                  $('.active').not($(this)).removeClass('active');
 					
                 }
             });
@@ -323,17 +326,7 @@
                 propScheduleArray[x] = propScheduleArray[x] + tempPropScheduleArray[x][i];
                 i++;
               }
-              
-      //     $.ajax({
-      //        type: "POST",
-      //        async: false,
-      //        url: "dbsave.php",
-      //        data: { propScheduleArray: propScheduleArray },
-      //        success: function(data) {
-      //                 alert("Data was succesfully captured");
-      //             },
-      //     });
-           }
+             }
             console.log(propScheduleArray);
             sessionStorage.removeItem('propScheduleArray'); //remove the propScheduleArray in the session
             sessionStorage.setItem('propScheduleArray', JSON.stringify(propScheduleArray)); //set a new propScheduleArray in the session

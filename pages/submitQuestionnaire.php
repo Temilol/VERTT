@@ -35,8 +35,8 @@
    $result = mysqli_query($conn, $query);
 
    if(mysqli_num_rows($result) > 0){//The record already exists, update the existing record
-       $query = "UPDATE questionnaire SET studyHour='$full_time',currentlyWorking='$working',workingHours='$working_hour',planningChildren='$children',numberOfChildren='$children_number',ageOfLastChild='$children_age',helpWithChildren='$children_help',expectedGraduationDate='$graduation_date',selfMotivated='$self_motivation',code='$coding_interest',needToImproveGPA='$improve_gpa',athlete='$athlete',extracurricular='$extra_cirricular',totalScore='$totalScore' WHERE studentID='$studentID'";
-       $result = mysqli_query($conn, $query);
+     $query = "UPDATE questionnaire SET studyHour='$full_time',currentlyWorking='$working',workingHours='$working_hour',planningChildren='$children',numberOfChildren='$children_number',ageOfLastChild='$children_age',helpWithChildren='$children_help',expectedGraduationDate='$graduation_date',selfMotivated='$self_motivation',code='$coding_interest',needToImproveGPA='$improve_gpa',athlete='$athlete',extracurricular='$extra_cirricular',totalScore='$totalScore' WHERE studentID='$studentID'";
+     $result = mysqli_query($conn, $query);
    }else{//The record doesn't exist, create a new record
       $query = "INSERT INTO questionnaire (questionID, studentID, concentration, studyHour, currentlyWorking, workingHours, planningChildren, numberOfChildren, ageOfLastChild, helpWithChildren, expectedGraduationDate, selfMotivated, code, needToImproveGPA, athlete, extracurricular, totalScore) VALUES ('', '$studentID', 'cyber-security', '$full_time', '$working', '$working_hour', '$children', '$children_number', '$children_age', '$children_help', '$graduation_date', '$self_motivation', '$coding_interest', '$improve_gpa', '$athlete', '$extra_cirricular', '$totalScore')";
       $result = mysqli_query($conn, $query);

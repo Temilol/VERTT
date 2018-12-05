@@ -115,7 +115,7 @@
           <div class="clear"></div>
           <div style="padding-top: 10%;">
             <button type="button" class="btn btn-lg btn-success btn-edited" name="Build_Schedule" onclick="window.location='buildSchedule.php';">Build Schedule</button>
-            <button type="button" class="btn btn-lg btn-success btn-edited" name="View_Schedule" onclick="alert('Coming Soon');" style="margin-left: 17%;">View Schedule</button>
+            <button type="button" class="btn btn-lg btn-success btn-edited" name="View_Schedule" onclick="window.location='viewSchedule.php';" style="margin-left: 17%;">View Schedule</button>
             <button type="button" class="btn btn-lg btn-success btn-edited" name="View_Transcript" onclick="window.location='transcript.php';" style="margin-left: 15%;">View Transcript</button>
           </div>
           <div style="padding-top: 10%;">
