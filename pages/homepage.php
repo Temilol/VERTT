@@ -99,7 +99,7 @@
                 ?>
               </a></li>
               <li><a href="logOut.php">Log Out</a></li>
-              <li><img src="../asset/image/main/icon.png" alt="logo" style="width:40px;"></li>
+              <li><img src="../asset/image/main/icon.png" alt="logo" style="width:40px;" onclick="window.location='viewQuestionnaire.php';"></li>
             </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
