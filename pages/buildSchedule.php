@@ -76,6 +76,7 @@
     }else{
       $courseCodeRemaining = $courseCodesRemaining;
     }
+print_r($courseCodeRemaining);
 ?>
 
 
@@ -253,13 +254,16 @@
                   <div class="list-group-el" id="newList">
                       <ul class="list-group">
                           <?php
-                            for($i = 0; $i < count($curriculums); $i++){
-                                if($curriculums[$i]["courseCode"] == $courseCodeRemaining[$i]){
-                                  echo "<li class='list-group-item'>
-                                            {$curriculums[$i]["courseCode"]} - {$curriculums[$i]["courseName"]}
-                                        </li>";
+                            foreach($courseCodeRemaining as $courseCodeRem):
+                              foreach($curriculums as $curriculum):
+                                if($curriculum["courseCode"] == $courseCodeRem){
+                                    echo "<li class='list-group-item'>
+                                              {$curriculum["courseCode"]} - {$curriculum["courseName"]}
+                                          </li>";
+                                  break;
                                 }
-                            }
+                              endforeach;
+                            endforeach;
                           ?>
                       </ul>
                   </div>
