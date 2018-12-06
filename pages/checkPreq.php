@@ -71,7 +71,7 @@
     if($coding == "Yes"){
       $comment2 = "Since you like coding, we recommend you taking WEB DESIGN classes or PROGRAMMING/CODING classes";
     }else{
-      $comment2 = "Since you don't like coding, we recommend you taking CYBERSECURITY classes";
+      $comment2 = "Since you do not like coding, we recommend you taking CYBERSECURITY classes";
     }
     $comments[] = $comment2;
     
@@ -135,7 +135,6 @@
     echo json_encode($response);
   }
   else if (isset($_POST['insertScd'])) {//This function inserts the schedule into the database and alerts the advisor
-//     print_r($_POST['insertScd']);
     $recomScheduleArray = $_POST['insertScd']['recomScheduleArray'];
     $propScheduleArray = $_POST['insertScd']['propScheduleArray'];
     $sysComments = $_POST['insertScd']['sysComments'];
@@ -157,6 +156,9 @@
     // Insert a new record into the database
     $query = "INSERT INTO proposalSchedule (proposalScheduleID, studentID, proposedSchedule, recommendedCourses, comments, studentDecision, advisorDecision) VALUES ('', '$studentID', '$propScheduleStr', '$recomScheduleStr', '$sysCommentsStr', '$decision', 'NULL')";
     $result = mysqli_query($conn, $query);
+    
+    //Delete the proposalSchedule from the session
+    unset($_SESSION['propClassSch']);
     
     //Send email to the advisor
 //     $advisorID = $_SESSION['advisorID'];
@@ -195,6 +197,8 @@
     $query = "INSERT INTO proposalSchedule (proposalScheduleID, studentID, proposedSchedule, recommendedCourses, comments, studentDecision, advisorDecision) VALUES ('', '$studentID', '$propScheduleStr', '$recomScheduleStr', '$sysCommentsStr', '$decision', 'NULL')";
     $result = mysqli_query($conn, $query);
     
+    //Delete the proposalSchedule from the session
+    unset($_SESSION['propClassSch']);
     //Send email to the advisor
 //     $advisorID = $_SESSION['advisorID'];
 //     $query = "SELECT advisorEmail from advisor WHERE advisorID = '$advisorID'"; //Get the advisor email

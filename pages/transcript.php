@@ -29,6 +29,7 @@
    // While loops through every class
    while ($transcript = mysqli_fetch_assoc($result)){
      $transcripts[] = $transcript;
+     $studentGPA = $transcript['studentGPA'];
    }
 
   // Get student Information
@@ -42,6 +43,7 @@
   }
   
   $stud = mysqli_fetch_assoc($result);
+// print_r($studentGPA);
 ?>
 
 <!DOCTYPE html>
@@ -134,6 +136,7 @@
       <div class="well jumbotron1"></div>
       <div class="container" style="margin-left: -13px;">
         <h3 style="text-align:center; color:green"><?php echo"{$stud["firstName"]} {$stud["lastName"]} "?>Transcript</h3>
+         <h4><strong>Current GPA</strong>: <?php echo $studentGPA; ?></h4>
         <table class="table table-hover">
           <thead style="background-color:#2ba70a; color:white">
             <tr>
@@ -161,8 +164,7 @@
             ?>
           </tbody>
         </table>
-      </div>
-      
+      </div>      
     </div>
 
     <footer class="footer">

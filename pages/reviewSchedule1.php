@@ -226,6 +226,13 @@
         }
         if(flag == 'failed'){
           alert("Some Prerequisite requirement were not met. Please remove the courses before proceeding");
+          $.ajax({
+            url: '../config/setPropCourse.php', //Reference to the checkPreq.php page
+            type: "POST", //References it after (post)
+            dataType: 'json', //The type of data being used
+            data: {"json_string": JSON.stringify(propScheduleArray)}, //Call the function and use the array variable to execute
+            async: false,
+          });
         }else{
           alert("Prerequisite for all courses were met");
           $.ajax({

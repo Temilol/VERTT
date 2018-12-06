@@ -198,7 +198,7 @@
           <br />
           <div class="row-middle">
 
-            <div class="dual-list list-left col-md-4">
+            <div id="tempProposedCourses" class="dual-list list-left col-md-4">
               <h3 style="text-align: center;">Your Courses</h3>
                 <div class="well ">
                   <div class="list-group-el">
@@ -267,8 +267,29 @@
       });
       
       $("#btn-modify").click(function(){
-        var retVal = confirm("Are you sure you want to start again?");
+        var retVal = confirm("Are you sure you want to modify your schedule?");
         if(retVal == true){
+          var tempPropScheduleArray = []; // Array that will temporary hold the proposed schedule classes
+          var propScheduleArray = []; // Array that will hold the finalised proposed schedule classes
+          $("#tempProposedCourses li").each(function() { tempPropScheduleArray.push($(this).text()) }); // Add every class to the array
+          
+          for ( var x = 0; x < tempPropScheduleArray.length; x++){	
+            tempPropScheduleArray[x] = tempPropScheduleArray[x].replace(/[\n\t\r]/g,"").trim(); // Remove all special characters and spaces from the list to array conversion
+            var i = 0;
+            propScheduleArray[x] = "";
+            while(tempPropScheduleArray[x][i] != " "){ //Extract the course code from the string
+              propScheduleArray[x] = propScheduleArray[x] + tempPropScheduleArray[x][i];
+              i++;
+            }
+           }
+          $.ajax({
+            url: '../config/setPropCourse.php', //Reference to the checkPreq.php page
+            type: "POST", //References it after (post)
+            dataType: 'json', //The type of data being used
+            data: {"json_string": JSON.stringify(propScheduleArray)}, //Call the function and use the array variable to execute
+            async: false,
+          });
+//           console.log(propScheduleArray);
           window.location.href = "buildSchedule.php";
         }else{
           return false;

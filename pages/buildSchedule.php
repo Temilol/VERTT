@@ -12,6 +12,18 @@
   if(isset($_SESSION["studentID"])){
     $studentID = $_SESSION["studentID"];
   }
+
+  if(isset($_SESSION["propClassSch"])){
+    $propClassSchs = $_SESSION["propClassSch"];
+  }else{
+    $propClassSch = [];
+  }
+
+// $propClassSch = [];
+// var_dump(isset($_SESSION["propClassSch"]));
+// $t = empty($propClassSch);
+// var_dump($t);
+//  die();
  
   // call the database config file
   require_once('../config/mysqli_connect.php');
@@ -43,14 +55,27 @@
      $transcriptCode[] = $transcript['courseCode'];
    }
    if(mysqli_num_rows($result) < 1){
-     $courseCodeRemaining = $curriculumCode;
+     $courseCodesRemaining = $curriculumCode;
    }else{
-     $courseCodeRemaining = array_diff($curriculumCode, $transcriptCode);
+     $courseCodesRemaining = array_diff($curriculumCode, $transcriptCode);
    }
 
-  
-// print_r($transcriptCode);
-// die();
+    if(!empty($propClassSchs)){
+      $x = 0;
+      foreach($propClassSchs as $propClassSch):
+        $query = "SELECT * FROM courses WHERE courseCode = '$propClassSch'";
+        $result = mysqli_query($conn, $query);
+        if(mysqli_num_rows($result) < 1){ //If no course is found, omit the course
+          continue;
+        }
+        $pSchCourses[] = mysqli_fetch_assoc($result);
+        $pSchCoursesCode[] = $pSchCourses[$x]['courseCode'];
+        $x = $x + 1;
+      endforeach;
+      $courseCodeRemaining = array_diff($courseCodesRemaining, $pSchCoursesCode);
+    }else{
+      $courseCodeRemaining = $courseCodesRemaining;
+    }
 ?>
 
 
@@ -246,8 +271,13 @@
                 <div class="well">
                   <br/>
                   <ul class="list-group">
-
-
+                      <?php
+                        for($i = 0; $i < count($pSchCourses); $i++){
+                          echo "<li class='list-group-item'>
+                                    {$pSchCourses[$i]["courseCode"]} - {$pSchCourses[$i]["courseName"]}
+                                </li>";
+                        }
+                      ?>
                   </ul>
                 </div>
             </div>

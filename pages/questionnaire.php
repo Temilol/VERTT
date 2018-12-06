@@ -193,28 +193,7 @@
                                   </div>
 
                                   <hr>
-                                  
-<!--                                   <div class="form-group row">
-                                      <label for="children_number" class="col-xs-7 col-form-label">Which CIS course have you had the most difficulty with? <span style="color:red">*</span></label>
-                                      <div class="col-xs-5">
-                                          <select class="form-control" name="difficulty[]" multiple="multiple">
-                                              <option value=" "> </option>
-                                              <option value=" "> </option>
-                                              <option value=" "> </option>
-                                          </select>
-                                      </div>
-                                  </div>
-                                  
-                                  <div class="form-group row">
-                                      <label for="children_number" class="col-xs-7 col-form-label">Which CIS course have you had the least difficulty with? <span style="color:red">*</span></label>
-                                      <div class="col-xs-5">
-                                          <select class="form-control" name="difficulty[]" multiple="multiple">
-                                              <option value=" "> </option>
-                                              <option value=" "> </option>
-                                              <option value=" "> </option>
-                                          </select>
-                                      </div>
-                                  </div> -->
+                            
                                   
                                   <div class="form-group row">
                                       <label for="graduation_date" class="col-xs-8 col-form-label">What is your expected graduation date? <span style="color:red">*</span></label>
