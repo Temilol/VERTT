@@ -1,3 +1,7 @@
+<!-- updateAdvisor.php -->
+<!-- update the Advisor Profile-->
+<!-- VERTT Copyright 2018 -->
+
 <?php
   //  start session
    session_start();

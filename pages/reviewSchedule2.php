@@ -1,3 +1,6 @@
+<!-- Intelligent ReviewSchedule part 2 page -->
+<!-- VERTT Copyright 2018 -->
+
 <?php
   // start the session
   session_start();

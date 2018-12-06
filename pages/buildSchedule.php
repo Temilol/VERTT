@@ -1,3 +1,6 @@
+<!-- buildSchedule.php -->
+<!-- VERTT Copyright 2018 -->
+
 <?php
   // start the session
   session_start();
@@ -19,11 +22,6 @@
     $propClassSch = [];
   }
 
-// $propClassSch = [];
-// var_dump(isset($_SESSION["propClassSch"]));
-// $t = empty($propClassSch);
-// var_dump($t);
-//  die();
  
   // call the database config file
   require_once('../config/mysqli_connect.php');
@@ -76,7 +74,6 @@
     }else{
       $courseCodeRemaining = $courseCodesRemaining;
     }
-print_r($courseCodeRemaining);
 ?>
 
 

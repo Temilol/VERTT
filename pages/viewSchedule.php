@@ -1,3 +1,7 @@
+<!-- viewSchedule.php -->
+<!-- view the student schedule -->
+<!-- VERTT Copyright 2018 -->
+
 <?php
   //start the session
   session_start();

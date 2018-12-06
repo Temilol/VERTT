@@ -1,3 +1,5 @@
+<!-- Signin.php -->
+<!-- Validates your login credentials -->
 <!-- VERTT Copyright 2018 -->
 <?php
 
@@ -38,9 +40,6 @@
 
 // Check the user type
     $row = mysqli_fetch_assoc($result);
-// print_r($result);
-// die();
-
 
     $userType = $row["userType"];
 
@@ -62,7 +61,7 @@
      
     // Check if it is the student first time      
        $firstTime = $profile["firstTime"];
-       if($firstTime == 0){ //Not First time
+       if($firstTime == 0){ //Not First time Redirect to Student Homepage
           header("refresh:0; url=pages/homepage.php");
        }else if($firstTime == 1){
           echo '<script type="text/javascript">alert("You have to fill out the questionniare");</script>';
@@ -82,7 +81,7 @@
       $_SESSION["advisorID"] = $profile["advisorID"];
       $_SESSION["advisorNumber"] = $profile["advisorNumber"];
       
-      //Redirect to Homepage
+      //Redirect to Advisor Homepage
       header("refresh:0; url=pages/advisorHomepage.php");
     }
 ?>

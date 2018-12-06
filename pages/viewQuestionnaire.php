@@ -1,3 +1,7 @@
+<!-- viewQuestionnaire.php -->
+<!-- view the student questionnaire response -->
+<!-- VERTT Copyright 2018 -->
+
 <?php 
   session_start();
 

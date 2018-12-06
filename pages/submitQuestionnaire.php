@@ -1,3 +1,7 @@
+<!-- submitQuestionnaire.php -->
+<!-- submit the Student Questionnaire and a score is calculated based on their response -->
+<!-- VERTT Copyright 2018 -->
+
 <?php
 
   // Start session

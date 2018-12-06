@@ -1,3 +1,7 @@
+<!-- StudentRecord1.php -->
+<!-- Student Schedule Review by Advisors -->
+<!-- VERTT Copyright 2018 -->
+
 <?php
   // Start Session
   session_start();
