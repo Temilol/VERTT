@@ -1,7 +1,3 @@
-<!-- setSession.php -->
-<!-- Save the student proposed schedule into the session -->
-<!-- VERTT Copyright 2018 -->
-
 <?php
   // start the session
   session_start();

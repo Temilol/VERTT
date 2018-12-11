@@ -1,6 +1,3 @@
-<!-- setPropCourse.php -->
-<!-- Save the proposed schedule into the session -->
-<!-- VERTT Copyright 2018 -->
 
 <?php
   // start the session

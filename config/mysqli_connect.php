@@ -1,6 +1,3 @@
-<!-- mysqli_connect.php -->
-<!-- Database Configuration -->
-<!-- VERTT Copyright 2018 -->
 
 <?php
 // Database Connection

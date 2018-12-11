@@ -1,5 +1,4 @@
-<!-- Intelligent ReviewSchedule part 1 page -->
-<!-- VERTT Copyright 2018 -->
+
 
 <?php
   //start the session
@@ -144,7 +143,7 @@
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="javascript:history.go(-1)">Go Back<span class="sr-only">(current)</span></a></li>
+              <li class="active"><a href="homepage.php">Home<span class="sr-only">(current)</span></a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a>Welcome
@@ -198,7 +197,7 @@
     <script>
       $(document).ready(function(){
         var myArry  = sessionStorage.getItem('propScheduleArray');
-//         console.log(myArry);
+        console.log(myArry);
         var propScheduleArray = JSON.parse(myArry);
         var flag;
         

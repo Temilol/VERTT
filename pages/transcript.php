@@ -1,6 +1,3 @@
-<!-- transcript.php -->
-<!-- shows the Student Transcript -->
-<!-- VERTT Copyright 2018 -->
 
 <?php
 

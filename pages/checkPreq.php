@@ -1,7 +1,4 @@
-<!-- checkPreq.php -->
-<!-- VERTT Copyright 2018 -->
-<!-- This file perform the main operation of the system -->
-<!-- It composes of the main system functions -->
+
 
 <?php
   // Start the session

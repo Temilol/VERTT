@@ -1,6 +1,3 @@
-<!-- StudentRecord.php -->
-<!-- Student Transcript Record for Advisors -->
-<!-- VERTT Copyright 2018 -->
 
 <?php
   // Start Session
