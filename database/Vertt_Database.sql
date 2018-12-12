@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2018 at 02:32 PM
+-- Generation Time: Dec 12, 2018 at 03:14 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.0.26
 
@@ -46,18 +46,6 @@ INSERT INTO `advisor` (`advisorID`, `firstName`, `middleName`, `lastName`, `advi
 (12345, 'Jerry', 'Justin', 'Brake', 'jerry.brake@famu.edu', 2021341234, 'NE 200, Bernneker BUilding'),
 (12346, 'Mary', 'Jane', 'Stone', 'mary.stone@famu.edu', 2012341234, 'NE 201, Berneker Building'),
 (12347, 'Udochi', 'H', 'Maduakor', 'udochi1.maduakor@famu.edu', 1234230990, 'NE 201, Berneker Building');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `advisorStudent`
---
-
-CREATE TABLE `advisorStudent` (
-  `advisorStudentID` int(10) NOT NULL,
-  `advisorID` int(10) NOT NULL,
-  `studentID` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -222,19 +210,6 @@ CREATE TABLE `schedule` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schedule2`
---
-
-CREATE TABLE `schedule2` (
-  `scheduleID` int(10) NOT NULL,
-  `courseCode` char(10) COLLATE utf8_unicode_ci NOT NULL,
-  `courseName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `studentID` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `StudentProfile`
 --
 
@@ -387,14 +362,6 @@ ALTER TABLE `advisor`
   ADD PRIMARY KEY (`advisorID`);
 
 --
--- Indexes for table `advisorStudent`
---
-ALTER TABLE `advisorStudent`
-  ADD PRIMARY KEY (`advisorStudentID`),
-  ADD KEY `advisorID` (`advisorID`),
-  ADD KEY `studentID` (`studentID`);
-
---
 -- Indexes for table `colleges`
 --
 ALTER TABLE `colleges`
@@ -433,12 +400,6 @@ ALTER TABLE `questionnaire`
 --
 ALTER TABLE `schedule`
   ADD PRIMARY KEY (`scheduleID`);
-
---
--- Indexes for table `schedule2`
---
-ALTER TABLE `schedule2`
-  ADD PRIMARY KEY (`studentID`);
 
 --
 -- Indexes for table `StudentProfile`
@@ -511,13 +472,6 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `advisorStudent`
---
-ALTER TABLE `advisorStudent`
-  ADD CONSTRAINT `advisorStudent_ibfk_1` FOREIGN KEY (`advisorID`) REFERENCES `advisor` (`advisorID`),
-  ADD CONSTRAINT `advisorStudent_ibfk_2` FOREIGN KEY (`studentID`) REFERENCES `StudentProfile` (`studentID`);
-
---
 -- Constraints for table `colleges`
 --
 ALTER TABLE `colleges`
@@ -540,12 +494,6 @@ ALTER TABLE `proposalSchedule`
 --
 ALTER TABLE `questionnaire`
   ADD CONSTRAINT `questionnaire_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `StudentProfile` (`studentID`);
-
---
--- Constraints for table `schedule2`
---
-ALTER TABLE `schedule2`
-  ADD CONSTRAINT `schedule2_ibfk_1` FOREIGN KEY (`studentID`) REFERENCES `courses` (`courseID`);
 
 --
 -- Constraints for table `StudentProfile`

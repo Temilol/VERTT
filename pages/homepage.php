@@ -130,10 +130,5 @@
       </div>
     </div>
 
-    <footer class="footer">
-      <div class = "con">
-        <p>Copyright &copy VERTT 2018</p>
-      </div>
-    </footer>
   </body>
 </html>
